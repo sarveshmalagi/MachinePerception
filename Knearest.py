@@ -1,17 +1,10 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Sat Jan 28 12:22:27 2017
-
-@author: sarvesh
-"""
-
 import cv2
 import numpy as np
 import matplotlib.pyplot as plt
 
 #This function reads an image and returns the histogram values of hue and value
 def getImageHist():
-    ip_img = cv2.imread('test.jpg',cv2.IMREAD_COLOR)
+    ip_img = cv2.imread('img/test.jpg',cv2.IMREAD_COLOR)
     #resize the image to match the training set
     ip_img = cv2.resize(ip_img, (100,100))
     #convert image to HSV
@@ -28,12 +21,18 @@ def getImageHist():
 #This function uses CascadeClassifier to detect faces
 def detectFace():
     #Read the Haar cascade file
-    face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
+    face_cascade = cv2.CascadeClassifier('img/haarcascade_frontalface_default.xml')
     #read the image and convert it into grayscale
-    img = cv2.imread('test.jpg',cv2.IMREAD_COLOR)
+    img = cv2.imread('img/test.jpg',cv2.IMREAD_COLOR)
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     #detect faces and store in array
     faces = face_cascade.detectMultiScale(gray, 1.3, 5)
+    if len(faces) >= 1:
+        for (x,y,w,h) in faces:
+            cv2.rectangle(img,(x,y),(x+w,y+h),(255,0,0),2)
+        cv2.imshow('img',img)
+        cv2.waitKey(0)
+        cv2.destroyAllWindows()
     return len(faces)
     
 
@@ -64,12 +63,13 @@ else:
     blue = trainData[responses.ravel()==1]
     plt.scatter(blue[:,0],blue[:,1],80,'b','s')
     
-    plt.show()
+    #plt.show()
     
     #get the features from the input image to be classified
     newcomer = np.random.randint(0,100,(1,2)).astype(np.float32)
     newcomer[0,0],newcomer[0,1] = getImageHist()
-    
+    plt.scatter(newcomer[:,0],newcomer[:,1],80,'g','o')
+    plt.show()
     #use the KNearest_create() function to create a K Neareast Neighbour model
     knn = cv2.ml.KNearest_create()
     #Train the model using training data and labels

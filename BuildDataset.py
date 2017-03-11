@@ -1,20 +1,14 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Tue Jan 17 10:46:33 2017
-
-@author: sarvesh
-"""
 import cv2
 import os
 import csv
-
+#This program extracts features from the training data
 #create a cvs file to store 
-dataset = open('dataset.csv', 'a')
+dataset = open('dataset.csv', 'wt')
 
 #The directory has the training image set
 #iterate for every file in the directory
-for filename in os.listdir('night/'):
-    img = cv2.imread(os.path.join('night/',filename))
+for filename in os.listdir('img/night/'):
+    img = cv2.imread(os.path.join('img/night/',filename))
     if img is not None:
         #if the file is an image
         #convert it to HSV
